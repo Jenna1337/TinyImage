@@ -35,8 +35,7 @@ public class Timg
 			throw new IllegalArgumentException();
 		this.w=(short)(width -32768);
 		this.h=(short)(height-32768);
-
-		// TODO Auto-generated constructor stub
+		// TODO set data
 	}
 	public void setData(byte[] bytes)
 	{

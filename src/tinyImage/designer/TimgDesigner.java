@@ -28,8 +28,12 @@ public class TimgDesigner
 		JMenuItem NEW = new ActionMenuItem("New", new Thread(
 				new Runnable(){
 					public void run(){
-						//TODO prompt for new img size
-						panel.setData("\u0001\u0000\u0000\u0001".getBytes());}}));
+						TimgSizePopUp szpop = new TimgSizePopUp();
+						szpop.waitfor();;
+						//do nothing
+						short[] wh = szpop.getSizeShorts();
+						szpop.dispose();
+						panel.newImg(wh);}}));
 		file.add(NEW);
 		file.add(load);
 		file.add(save);

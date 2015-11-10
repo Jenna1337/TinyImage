@@ -12,6 +12,10 @@ public class TimgDesignerPanel extends JPanel
 	{
 		
 	}
+	public void newImg(short[] wh)
+	{
+		this.img = new Timg(wh[0], wh[1]);
+	}
 	public byte[] getData()
 	{
 		// TODO Auto-generated method stub
@@ -19,7 +23,7 @@ public class TimgDesignerPanel extends JPanel
 	}
 	public void setData(byte[] bytes)
 	{
-		this.img = new Timg(bytes);
+		this.img.setData(bytes);
 		this.repaintCanvas();
 	}
 }

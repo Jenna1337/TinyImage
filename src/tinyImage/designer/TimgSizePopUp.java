@@ -18,19 +18,27 @@ public class TimgSizePopUp extends JFrame implements WindowListener
 		//TODO
 		this.h=new JTextField("65535");
 		this.w=new JTextField("65535");
-		
+
 		this.getContentPane().add(h, BorderLayout.NORTH);
 		this.pack();
 		this.setVisible(true);
 	}
 	public volatile boolean active;
-	public void waitfor() throws InterruptedException
+	public void waitfor()
 	{
-		while(!active)
-		{
-			Thread.sleep(1000);
+		try{
+			while(!active)
+				Thread.sleep(1000);
+		}
+		catch(Exception e){
+			this.dispose();
 		}
 	}
+	/**
+	 * 
+	 * @return An array of shorts containing only width
+	 *         and height, in their respective order.
+	 **/
 	public short[] getSizeShorts()
 	{
 		//TODO
@@ -42,7 +50,7 @@ public class TimgSizePopUp extends JFrame implements WindowListener
 	public static void main(String args[]) throws Exception
 	{
 		TimgSizePopUp cc = new TimgSizePopUp();
-		
+
 		cc.waitfor();
 		System.out.println(java.util.Arrays.toString(cc.getSizeShorts()));
 	}
@@ -57,7 +65,7 @@ public class TimgSizePopUp extends JFrame implements WindowListener
 	public void windowDeiconified(WindowEvent e){}
 	public void windowIconified(WindowEvent e){}
 	public void windowOpened(WindowEvent e){}
-	
+
 	public short getShort(JTextField field)
 	{
 		return Short.parseShort(""+Integer.parseInt(field.getText())+Short.MIN_VALUE);
