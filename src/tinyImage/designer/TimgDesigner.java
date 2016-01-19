@@ -29,8 +29,8 @@ public class TimgDesigner
 				new Runnable(){
 					public void run(){
 						TimgSizePopUp szpop = new TimgSizePopUp();
-						szpop.waitfor();;
-						//do nothing
+						szpop.waitfor();
+						/*Wait...*/
 						short[] wh = szpop.getSizeShorts();
 						szpop.dispose();
 						panel.newImg(wh);}}));

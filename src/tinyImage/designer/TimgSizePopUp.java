@@ -1,37 +1,46 @@
 package tinyImage.designer;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import javax.swing.JFrame;
+import javax.swing.JSpinner;
+import javax.swing.JSpinner.NumberEditor;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 
 @SuppressWarnings("serial")
 public class TimgSizePopUp extends JFrame implements WindowListener
 {
-	private JTextField h, w;
+	private JSpinner h, w;
 	protected short[] wh;
 	public TimgSizePopUp()
 	{
-		this.setTitle("Double Color Chooser");
+		this.setTitle("Choose Size");
 		this.addWindowListener(this);
 		//TODO
-		this.h=new JTextField("65535");
-		this.w=new JTextField("65535");
-
+		this.setLayout(new FlowLayout());
+		this.h=new JSpinner(new SpinnerNumberModel(50,0,9999,1));
+		this.w=new JSpinner(new SpinnerNumberModel(50,0,9999,1));
+		
 		this.getContentPane().add(h, BorderLayout.NORTH);
+		this.getContentPane().add(w, BorderLayout.NORTH);
 		this.pack();
 		this.setVisible(true);
 	}
-	public volatile boolean active;
-	public void waitfor()
+	public volatile boolean active=true;
+	public byte waitfor()
 	{
 		try{
-			while(!active)
+			while(active)
 				Thread.sleep(1000);
+			this.dispose();
+			return 0;
 		}
 		catch(Exception e){
 			this.dispose();
+			return 1;
 		}
 	}
 	/**
@@ -42,7 +51,7 @@ public class TimgSizePopUp extends JFrame implements WindowListener
 	public short[] getSizeShorts()
 	{
 		//TODO
-		short[] sa=new short[4];
+		short[] sa=new short[2];
 		sa[0] = getShort(this.w);
 		sa[1] = getShort(this.h);
 		return sa;
@@ -51,7 +60,7 @@ public class TimgSizePopUp extends JFrame implements WindowListener
 	{
 		TimgSizePopUp cc = new TimgSizePopUp();
 
-		cc.waitfor();
+		System.out.println(cc.waitfor());
 		System.out.println(java.util.Arrays.toString(cc.getSizeShorts()));
 	}
 	public void windowActivated(WindowEvent e){}
@@ -59,16 +68,16 @@ public class TimgSizePopUp extends JFrame implements WindowListener
 	public void windowClosing(WindowEvent e)
 	{
 		wh = this.getSizeShorts();
-		active = true;
+		active = false;
 	}
 	public void windowDeactivated(WindowEvent e){}
 	public void windowDeiconified(WindowEvent e){}
 	public void windowIconified(WindowEvent e){}
 	public void windowOpened(WindowEvent e){}
 
-	public short getShort(JTextField field)
+	public short getShort(JSpinner field)
 	{
-		return Short.parseShort(""+Integer.parseInt(field.getText())+Short.MIN_VALUE);
+		return Short.parseShort(""+(Integer)field.getValue());
 	}
 }
 

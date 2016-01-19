@@ -7,6 +7,7 @@ import tinyImage.Timg;
 @SuppressWarnings("serial")
 public class TimgDesignerPanel extends JPanel
 {
+	Palette palette;
 	Timg img;
 	public void repaintCanvas()
 	{
