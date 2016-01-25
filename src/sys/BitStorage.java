@@ -39,4 +39,16 @@ public class BitStorage
 			out += b?'1':'0';
 		return out;
 	}
+	public String toCharString()
+	{
+		return new String(this.toByteArray());
+	}
+	public static String toCharString(BitStorage... bitStorages)
+	{
+		String str="";
+		for(BitStorage bs : bitStorages)
+			str+=bs.toCharString();
+		return str;
+	}
 }
+

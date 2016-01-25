@@ -4,7 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JSpinner.NumberEditor;
 import javax.swing.JTextField;
@@ -13,19 +16,32 @@ import javax.swing.SpinnerNumberModel;
 @SuppressWarnings("serial")
 public class TimgSizePopUp extends JFrame implements WindowListener
 {
+	private JPanel pane_btn=new JPanel(new FlowLayout()),
+					pane_in=new JPanel(new FlowLayout());
 	private JSpinner h, w;
+	private JButton button_ok, button_cancel;
 	protected short[] wh;
 	public TimgSizePopUp()
 	{
 		this.setTitle("Choose Size");
 		this.addWindowListener(this);
-		//TODO
-		this.setLayout(new FlowLayout());
+		
+		this.setLayout(new BorderLayout());
 		this.h=new JSpinner(new SpinnerNumberModel(50,0,9999,1));
 		this.w=new JSpinner(new SpinnerNumberModel(50,0,9999,1));
 		
-		this.getContentPane().add(h, BorderLayout.NORTH);
-		this.getContentPane().add(w, BorderLayout.NORTH);
+		pane_in.add(h);
+		pane_in.add(w);
+		this.getContentPane().add(pane_in, BorderLayout.NORTH);
+		
+		this.button_ok=new JButton("OK");
+		this.button_cancel=new JButton("Cancel");
+		//TODO give buttons actions
+		
+		pane_btn.add(button_ok);
+		pane_btn.add(button_cancel);
+		this.getContentPane().add(pane_btn, BorderLayout.SOUTH);
+		
 		this.pack();
 		this.setVisible(true);
 	}
@@ -50,7 +66,6 @@ public class TimgSizePopUp extends JFrame implements WindowListener
 	 **/
 	public short[] getSizeShorts()
 	{
-		//TODO
 		short[] sa=new short[2];
 		sa[0] = getShort(this.w);
 		sa[1] = getShort(this.h);

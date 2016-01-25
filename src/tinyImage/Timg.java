@@ -57,11 +57,8 @@ public class Timg
 				val <<= 1;
 			}
 		}
-		
-		
 		String[] pixels = splitAt(binary.substring(32), 3);
 		setRGBPixelData(pixels);
-		// TODO Auto-generated method stub
 	}
 	private void setRGBPixelData(String[] pixels)
 	{

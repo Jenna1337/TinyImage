@@ -19,7 +19,6 @@ public class TimgDesignerPanel extends JPanel
 	}
 	public byte[] getData()
 	{
-		// TODO Auto-generated method stub
 		return this.img.getData();
 	}
 	public void setData(byte[] bytes)
