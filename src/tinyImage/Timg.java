@@ -1,29 +1,13 @@
 package tinyImage;
 
+import java.util.ArrayList;
+
 import sys.BitStorage;
 
 public class Timg
 {
 	BitStorage r,g,b;
 	public short w,h;//2 bytes each
-	/**Creates new Timg<br>
-	 * <b>NOTE: Colors are not set directly</b><br>
-	 * use setData(byte[]) to set data
-	 * **/
-	public Timg()
-	{
-		
-	}
-	/**Creates new Timg<br>
-	 * <b>NOTE: Colors are not set directly</b><br>
-	 * use setData(byte[]) to set data
-	 * **/
-	@Deprecated
-	public Timg(byte[] data)
-	{
-		this(toShort(java.util.Arrays.copyOfRange(data, 0, 2)),
-				toShort(java.util.Arrays.copyOfRange(data, 2, 4)));
-	}
 	/**Creates new Timg<br>
 	 * 
 	 * @param width - image width as a unsigned short
@@ -37,29 +21,7 @@ public class Timg
 		this.h=(short)(height-32768);
 		// TODO set data
 	}
-	public void setData(byte[] bytes)
-	{
-		//sets width and height
-		int width =toShort(java.util.Arrays.copyOfRange(bytes, 0, 2));
-		int height=toShort(java.util.Arrays.copyOfRange(bytes, 2, 4));
-		if(width<0 || height<0 || width>65535 || height>65535)
-			throw new IllegalArgumentException();
-		this.w=(short)(width -32768);
-		this.h=(short)(height-32768);
-		
-		String binary="";
-		for (byte b : bytes)
-		{
-			int val = b;
-			for (int i = 0; i < 8; i++)
-			{
-				binary+=((val & 128) == 0 ? 0 : 1);
-				val <<= 1;
-			}
-		}
-		String[] pixels = splitAt(binary.substring(32), 3);
-		setRGBPixelData(pixels);
-	}
+	/**sets pixel colors based on binary rgb**/
 	private void setRGBPixelData(String[] pixels)
 	{
 		for(int i=0; i<pixels.length; ++i)
@@ -109,9 +71,47 @@ public class Timg
 			retVal = (short)(b[1] << 8 | b[0]);//for little endian
 		return retVal;
 	}
+	public void setData(byte[] bytes)
+	{
+		//sets width and height
+		int width =toShort(java.util.Arrays.copyOfRange(bytes, 0, 2));//0 and 1
+		int height=toShort(java.util.Arrays.copyOfRange(bytes, 2, 4));//2 and 3
+		if(width<0 || height<0 || width>65535 || height>65535)
+			throw new IllegalArgumentException();
+		this.w=(short)(width -32768);
+		this.h=(short)(height-32768);
+		
+		String binary="";
+		for (byte b : bytes)
+		{
+			int val = b;
+			for (int i = 0; i < 8; i++)
+			{
+				binary+=((val & 128) == 0 ? 0 : 1);
+				val <<= 1;
+			}
+		}
+		String[] pixels = splitAt(binary.substring(32), 3);
+		//TODO add date and copyright info file metadata
+		setRGBPixelData(pixels);
+	}
 	public byte[] getData()
 	{
-		// TODO Auto-generated method stub
-		return null;
+								// 2,2,w*h*3,64,variable
+								// w,h,size,date,copyright
+		byte[] outbytes = new byte[2+2+w*h*3+64+0/*TODO*/];
+		
+		// TODO Implement getData() based from setData(byte[]) above
+		
+		r.toByteArray();
+		g.toByteArray();
+		b.toByteArray();
+		
+		return outbytes;
+	}
+	@Override
+	public String toString()
+	{
+		return new String(this.getData());
 	}
 }

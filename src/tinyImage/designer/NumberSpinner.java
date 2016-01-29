@@ -1,7 +1,6 @@
 package tinyImage.designer;
 
 import javax.swing.JSpinner;
-import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 
 @SuppressWarnings("serial")

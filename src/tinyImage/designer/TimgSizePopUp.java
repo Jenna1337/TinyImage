@@ -9,8 +9,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
-import javax.swing.JSpinner.NumberEditor;
-import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 
 @SuppressWarnings("serial")
