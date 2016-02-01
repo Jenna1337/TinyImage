@@ -18,7 +18,7 @@ public class TimgDesigner
 		JMenuItem save = new ActionMenuItem("Save As...", new Thread(
 				new Runnable(){
 					public void run(){
-						FileIO.save(frame, new String(panel.getData()));}}));
+						FileIO.save(frame, panel.getData());}}));
 		JMenuItem load = new ActionMenuItem("Open File...", new Thread(
 				new Runnable(){
 					public void run(){

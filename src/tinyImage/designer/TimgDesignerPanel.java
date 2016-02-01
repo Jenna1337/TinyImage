@@ -11,7 +11,7 @@ public class TimgDesignerPanel extends JPanel
 	Timg img;
 	public void repaintCanvas()
 	{
-		
+		//TODO
 	}
 	public void newImg(short[] wh)
 	{

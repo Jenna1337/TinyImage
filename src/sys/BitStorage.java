@@ -1,7 +1,5 @@
 package sys;
 
-
-
 public class BitStorage
 {
 	boolean[] bits;
@@ -49,6 +47,20 @@ public class BitStorage
 		for(BitStorage bs : bitStorages)
 			str+=bs.toCharString();
 		return str;
+	}
+	public static byte[] concatenate (byte[] a, byte[]... bc)
+	{
+		byte[] n = java.util.Arrays.copyOf(a, a.length);
+		for(byte[] b : bc)
+			concatenate(n, b);
+		return n;
+	}
+	private static byte[] concatenate (byte[] a, byte[] b)
+	{
+		byte[] c = new byte[a.length+b.length];
+		System.arraycopy(a, 0, c, 0, a.length);
+		System.arraycopy(b, 0, c, a.length, b.length);
+		return c;
 	}
 }
 

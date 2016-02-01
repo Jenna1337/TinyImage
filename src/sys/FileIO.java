@@ -10,7 +10,7 @@ public class FileIO
 {
 	static String fileext=".timg";
 	static ExtensionFileFilter filter = new ExtensionFileFilter("Tiny Image File", fileext);
-	public static void save(Component parent, String data)
+	public static void save(Component parent, byte[] data)
 	{
 		JFileChooser fc = new JFileChooser();
 		fc.addChoosableFileFilter(filter);
@@ -21,7 +21,7 @@ public class FileIO
 			try
 			{
 				FileOutputStream out = new FileOutputStream(file);
-				out.write((data).getBytes());
+				out.write(data);
 				out.close();
 			} catch (IOException e) {
 				e.printStackTrace();
