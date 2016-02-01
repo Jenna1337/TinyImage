@@ -1,14 +1,18 @@
 package tinyImage;
 
+import java.io.IOException;
 import java.util.Date;
 
 import sys.BitStorage;
 
 public class Timg
 {
+	static byte revision=0;
+	byte fileversion=0;
 	BitStorage r,g,b;
 	public short w,h;//2 bytes each
 	protected Date lastsaved = new Date();
+	String ccinfo="";
 	/**Creates new Timg<br>
 	 * 
 	 * @param width - image width as a unsigned short
@@ -73,46 +77,48 @@ public class Timg
 		b[1] = (byte)((s >> 8) & 0xff);
 		return b;
 	}
-	public void setData(byte[] bytes)
+	/**@throws IOException if the data given is a newer version than the program**/
+	public void setData(byte[] bytes) throws IOException
 	{
+		int index=0;
+		
+		//check version
+		if(bytes[index]>Timg.revision)
+			throw new java.io.IOException("");
+		index+=1;
+		
 		//sets width and height
-		int width =toShort(java.util.Arrays.copyOfRange(bytes, 0, 2));//0 and 1
-		int height=toShort(java.util.Arrays.copyOfRange(bytes, 2, 4));//2 and 3
+		int width =toShort(java.util.Arrays.copyOfRange(bytes, index, 2+index));//0 and 1
+		index+=2;
+		int height=toShort(java.util.Arrays.copyOfRange(bytes, index, 4+index));//2 and 3
+		index+=2;
 		if(width<0 || height<0 || width>65535 || height>65535)
 			throw new IllegalArgumentException();
 		this.w=(short)(width -32768);
 		this.h=(short)(height-32768);
-		this.lastsaved.setTime(bytetolong(java.util.Arrays.copyOfRange(bytes, 4, 12)));
 
-		String bits="";
-		for (int b=12; b<bytes.length; ++b)
-		{
-			int val = bytes[b];
-			for (int i = 0; i < 8; i++)
-			{
-				bits+=((val & 128) == 0 ? 0 : 1);
-				val <<= 1;
-			}
-		}
-		String[] dat = splitAt(bits.substring(32, w*h*3), 3);
-		boolean[] rgb=new boolean[w*h];
-		//TODO assign colors
+		//set date
+		this.lastsaved.setTime(bytetolong(java.util.Arrays.copyOfRange(bytes, index, 8+index)));
+		index+=8;
 
+		//set colors
+		final int bytes_percolor=(int)Math.ceil(w*h/8);
+		byte[] rgba = java.util.Arrays.copyOfRange(bytes, index, index+bytes_percolor*3+1);
+		index+=bytes_percolor*3+1;
 
-		//TODO add copyright info file metadata?
+		this.r = new BitStorage(java.util.Arrays.copyOfRange(rgba, 0,                 bytes_percolor+1));
+		this.g = new BitStorage(java.util.Arrays.copyOfRange(rgba, bytes_percolor+1,   bytes_percolor*2+1));
+		this.b = new BitStorage(java.util.Arrays.copyOfRange(rgba, bytes_percolor*2+1, bytes_percolor*3+1));
 
+		//set copyright info file meta
+		this.ccinfo=new String(java.util.Arrays.copyOfRange(bytes, index, bytes.length));
 	}
 	public byte[] getData()
 	{
-		;						// 2, 2, 64,  w*h*3, variable
-		;						// w, h, date,color, copyright
-		byte[] outbytes = new byte[2+ 2+ 64+  w*h*3+ 0/*TODO*/ ];
-
-		// TODO Implement getData() based from setData(byte[]) above
-
-		BitStorage.concatenate(toBytes(w), toBytes(h), 
+		byte[] outbytes = BitStorage.concatenate(new byte[]{Timg.revision}, toBytes(w), toBytes(h), 
 				longtobyte(new Date().getTime()), 
-				r.toByteArray(), g.toByteArray(), b.toByteArray());
+				r.toByteArray(), g.toByteArray(), b.toByteArray(),
+				ccinfo.getBytes());
 
 		return outbytes;
 	}

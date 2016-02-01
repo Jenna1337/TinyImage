@@ -7,6 +7,10 @@ public class BitStorage
 	{
 		bits = bitArray;
 	}
+	public BitStorage(byte[] bytes)
+	{
+		this.bits = byte2bit(bytes);
+	}
 	public void set(int index, boolean value)
 	{
 		this.bits[index] = value;
@@ -61,6 +65,13 @@ public class BitStorage
 		System.arraycopy(a, 0, c, 0, a.length);
 		System.arraycopy(b, 0, c, a.length, b.length);
 		return c;
+	}
+	private static boolean[] byte2bit(byte[] bytes) {
+		boolean[] bits = new boolean[bytes.length * 8];
+		for (int i = 0; i < bytes.length * 8; i++)
+			if ((bytes[i / 8] & (1 << (7 - (i % 8)))) > 0)
+				bits[i] = true;
+		return bits;
 	}
 }
 
