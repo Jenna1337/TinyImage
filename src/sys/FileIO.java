@@ -18,6 +18,10 @@ public class FileIO
 		int returnVal = fc.showSaveDialog(parent);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File file = fc.getSelectedFile();
+			String path=file.getPath();
+			if(!file.exists() && !path.endsWith(fileext)){
+				path+=fileext;
+				file = new File(path);;}
 			try
 			{
 				FileOutputStream out = new FileOutputStream(file);
@@ -93,7 +97,7 @@ class ExtensionFileFilter extends javax.swing.filechooser.FileFilter {
 			for (int i = 0, n = extensions.length; i < n; i++)
 			{
 				String extension = extensions[i];
-				if ((path.endsWith(extension) && (path.charAt(path.length() - extension.length() - 1)) == '.'))
+				if (path.endsWith(extension))
 					return true;
 			}
 		}

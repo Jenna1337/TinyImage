@@ -1,5 +1,7 @@
 package tinyImage.designer;
 
+import java.io.IOException;
+
 import javax.swing.JPanel;
 
 import tinyImage.Timg;
@@ -8,7 +10,7 @@ import tinyImage.Timg;
 public class TimgDesignerPanel extends JPanel
 {
 	Palette palette;
-	Timg img;
+	Timg img=new Timg();
 	public void repaintCanvas()
 	{
 		//TODO
@@ -21,7 +23,7 @@ public class TimgDesignerPanel extends JPanel
 	{
 		return this.img.getData();
 	}
-	public void setData(byte[] bytes)
+	public void setData(byte[] bytes) throws IOException
 	{
 		this.img.setData(bytes);
 		this.repaintCanvas();

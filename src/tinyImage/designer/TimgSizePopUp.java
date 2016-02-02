@@ -4,22 +4,31 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-
-import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
 @SuppressWarnings("serial")
-public class TimgSizePopUp extends JFrame implements WindowListener
+public class TimgSizePopUp extends JDialog implements WindowListener
 {
 	private JPanel pane_btn=new JPanel(new FlowLayout()),
 					pane_in=new JPanel(new FlowLayout());
 	private JSpinner h, w;
-	private JButton button_ok, button_cancel;
+	private ActionButton button_ok, button_cancel;
 	protected short[] wh;
+	private byte choice;
+	public TimgSizePopUp(JFrame parent)
+	{
+		super(parent);
+		this.init();
+	}
 	public TimgSizePopUp()
+	{
+		this.init();
+	}
+	private void init()
 	{
 		this.setTitle("Choose Size");
 		this.addWindowListener(this);
@@ -32,14 +41,27 @@ public class TimgSizePopUp extends JFrame implements WindowListener
 		pane_in.add(w);
 		this.getContentPane().add(pane_in, BorderLayout.NORTH);
 		
-		this.button_ok=new JButton("OK");
-		this.button_cancel=new JButton("Cancel");
-		//TODO give buttons actions
+		TimgSizePopUp mywindow=this;
+		this.button_ok=new ActionButton("OK", new Thread(new Runnable(){
+			public void run(){
+				mywindow.choice=0;
+				active=false;
+				mywindow.dispose();
+			}
+		}));
+		this.button_cancel=new ActionButton("Cancel", new Thread(new Runnable(){
+			public void run(){
+				mywindow.choice=1;
+				active=false;
+				mywindow.dispose();
+			}
+		}));
 		
 		pane_btn.add(button_ok);
 		pane_btn.add(button_cancel);
 		this.getContentPane().add(pane_btn, BorderLayout.SOUTH);
 		
+		this.setModal(true);
 		this.pack();
 		this.setVisible(true);
 	}
@@ -64,6 +86,8 @@ public class TimgSizePopUp extends JFrame implements WindowListener
 	 **/
 	public short[] getSizeShorts()
 	{
+		if(this.choice!=0)
+			return null;
 		short[] sa=new short[2];
 		sa[0] = getShort(this.w);
 		sa[1] = getShort(this.h);
@@ -90,7 +114,7 @@ public class TimgSizePopUp extends JFrame implements WindowListener
 
 	public short getShort(JSpinner field)
 	{
-		return Short.parseShort(""+(Integer)field.getValue());
+		return Short.parseShort(""+((Integer)field.getValue()+Short.MIN_VALUE));
 	}
 }
 

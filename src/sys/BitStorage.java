@@ -11,6 +11,12 @@ public class BitStorage
 	{
 		this.bits = byte2bit(bytes);
 	}
+	public BitStorage(int length)
+	{
+		this.bits = new boolean[length];
+		for(int i=0; i<length; ++i)
+			this.bits[i]=false;
+	}
 	public void set(int index, boolean value)
 	{
 		this.bits[index] = value;
@@ -54,9 +60,16 @@ public class BitStorage
 	}
 	public static byte[] concatenate (byte[] a, byte[]... bc)
 	{
+		int debug=1;
 		byte[] n = java.util.Arrays.copyOf(a, a.length);
 		for(byte[] b : bc)
+		{
+			debug+=b.length;
+			System.out.println(b.length+"; "+java.util.Arrays.toString(b));
+			n = java.util.Arrays.copyOf(n, n.length+b.length);
 			concatenate(n, b);
+		}
+		System.out.println(debug);
 		return n;
 	}
 	private static byte[] concatenate (byte[] a, byte[] b)

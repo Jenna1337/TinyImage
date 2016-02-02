@@ -7,8 +7,7 @@ import sys.BitStorage;
 
 public class Timg
 {
-	static byte revision=0;
-	byte fileversion=0;
+	private static byte revision=0;
 	BitStorage r,g,b;
 	public short w,h;//2 bytes each
 	protected Date lastsaved = new Date();
@@ -18,13 +17,23 @@ public class Timg
 	 * @param width - image width as a unsigned short
 	 * @param height - image height as a unsigned short
 	 */
-	public Timg(int width, int height)
+	public Timg(){}
+	public Timg(short width, short height)
 	{
-		if(width<0 || height<0 || width>65535 || height>65535)
-			throw new IllegalArgumentException();
-		this.w=(short)(width -32768);
-		this.h=(short)(height-32768);
-		// TODO set data
+		this.w = width;
+		this.h = height;
+		this.r = new BitStorage(this.getWidth()*this.getHeight());
+		this.g = new BitStorage();
+		this.b = new BitStorage();
+	}
+	public Timg(byte[] data)
+	{
+		data[0]=Timg.getRevision();
+		try {
+			this.setData(data);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	public static String[] splitAt(String str, int len)
 	{
@@ -81,28 +90,24 @@ public class Timg
 	public void setData(byte[] bytes) throws IOException
 	{
 		int index=0;
-		
+
 		//check version
-		if(bytes[index]>Timg.revision)
+		if(bytes[0]>Timg.getRevision())
 			throw new java.io.IOException("");
 		index+=1;
-		
+
 		//sets width and height
-		int width =toShort(java.util.Arrays.copyOfRange(bytes, index, 2+index));//0 and 1
+		this.w=toShort(java.util.Arrays.copyOfRange(bytes, index, 2+index));//0 and 1
 		index+=2;
-		int height=toShort(java.util.Arrays.copyOfRange(bytes, index, 4+index));//2 and 3
+		this.h=toShort(java.util.Arrays.copyOfRange(bytes, index, 4+index));//2 and 3
 		index+=2;
-		if(width<0 || height<0 || width>65535 || height>65535)
-			throw new IllegalArgumentException();
-		this.w=(short)(width -32768);
-		this.h=(short)(height-32768);
 
 		//set date
 		this.lastsaved.setTime(bytetolong(java.util.Arrays.copyOfRange(bytes, index, 8+index)));
 		index+=8;
 
 		//set colors
-		final int bytes_percolor=(int)Math.ceil(w*h/8);
+		final int bytes_percolor=(int)Math.ceil((int)this.getWidth()*(int)this.getHeight()/8);
 		byte[] rgba = java.util.Arrays.copyOfRange(bytes, index, index+bytes_percolor*3+1);
 		index+=bytes_percolor*3+1;
 
@@ -115,11 +120,10 @@ public class Timg
 	}
 	public byte[] getData()
 	{
-		byte[] outbytes = BitStorage.concatenate(new byte[]{Timg.revision}, toBytes(w), toBytes(h), 
+		byte[] outbytes = BitStorage.concatenate(new byte[]{Timg.getRevision()}, toBytes(w), toBytes(h), 
 				longtobyte(new Date().getTime()), 
 				r.toByteArray(), g.toByteArray(), b.toByteArray(),
 				ccinfo.getBytes());
-
 		return outbytes;
 	}
 	@Override
@@ -163,5 +167,8 @@ public class Timg
 				(long)(0xff & data[6]) << 8   |
 				(long)(0xff & data[7]) << 0
 				);
+	}
+	public static byte getRevision() {
+		return revision;
 	}
 }
