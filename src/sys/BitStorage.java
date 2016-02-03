@@ -2,7 +2,7 @@ package sys;
 
 public class BitStorage
 {
-	boolean[] bits;
+	private boolean[] bits;
 	public BitStorage(boolean... bitArray)
 	{
 		bits = bitArray;
@@ -15,7 +15,7 @@ public class BitStorage
 	{
 		this.bits = new boolean[length];
 		for(int i=0; i<length; ++i)
-			this.bits[i]=false;
+			this.bits[i]=true;
 	}
 	public void set(int index, boolean value)
 	{
@@ -85,6 +85,10 @@ public class BitStorage
 			if ((bytes[i / 8] & (1 << (7 - (i % 8)))) > 0)
 				bits[i] = true;
 		return bits;
+	}
+	public boolean get(int i)
+	{
+		return this.bits[i];
 	}
 }
 

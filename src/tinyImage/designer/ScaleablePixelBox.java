@@ -1,45 +1,58 @@
 package tinyImage.designer;
 
+import java.awt.Color;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 import javax.swing.event.MouseInputListener;
 
 @SuppressWarnings("serial")
 public class ScaleablePixelBox extends JPanel implements MouseInputListener
 {
 	//for use in palette and main image design screen
-	//TODO add a clickable colorable box that can execute a command
-	//might have to be abstract
 	private boolean mouseisover=false;
-	private boolean mousedown=false;
-	protected ThreeBitColor color;
-	
-	ActionThread thread;
-	
-	public ScaleablePixelBox(ActionThread thread, ThreeBitColor colorinitss)
+	volatile boolean mousedown=false;
+	volatile int size = 50;
+	private ThreeBitColor color;
+
+	Thread thread;
+
+	public ScaleablePixelBox(Thread thread, ThreeBitColor colorinit)
 	{
-		//TODO
+		this.thread = thread;
+		this.setBackground(colorinit.getColor());
+		this.setBorder(new LineBorder(Color.GRAY));
+		//size = Math.min(this.getParent().getWidth(),this.getParent().getHeight());
+		this.setSize(size, size);
+		//TODO add a set size / ratio --- might not be in this file
 	}
-	public void mouseClicked(MouseEvent e)
+	private void runif()
 	{
-		// TODO Auto-generated method stub
+		if(this.mouseisover && this.mousedown)
+			this.thread.run();
 	}
+	public void mouseClicked(MouseEvent e){}
 	public void mouseEntered(MouseEvent e)
 	{
-		// TODO Auto-generated method stub
+		this.mouseisover=true;
+		runif();
 	}
 	public void mouseExited(MouseEvent e)
 	{
-		// TODO Auto-generated method stub
+		runif();
+		this.mouseisover=false;
 	}
 	public void mousePressed(MouseEvent e)
 	{
-		// TODO Auto-generated method stub
+		this.mousedown=true;
+		runif();
 	}
 	public void mouseReleased(MouseEvent e)
 	{
-		// TODO Auto-generated method stub
+		runif();
+		this.mousedown=false;
 	}
 	public void mouseDragged(MouseEvent arg0){}
 	public void mouseMoved(MouseEvent arg0){}
@@ -49,29 +62,14 @@ public class ScaleablePixelBox extends JPanel implements MouseInputListener
 	public boolean isMouseDown() {
 		return mousedown;
 	}
-}
-enum ThreeBitColor
-{
-	//       red  green  blue
-	BLACK  (false,false,false),//000 
-	RED    (true, false,false),//100 
-	GREEN  (false, true,false),//010 
-	YELLOW ( true, true,false),//110 
-	BLUE   (false,false, true),//001 
-	MAGENTA( true,false, true),//101 
-	CYAN   (false, true, true),//011 
-	WHITE  ( true, true, true);//111 
-	boolean r,g,b;
-	ThreeBitColor(boolean red, boolean green, boolean blue)
-	{
-		this.r=red; this.g=green; this.b=blue;
+	public ThreeBitColor getColor() {
+		return color;
 	}
-	public boolean[] getRGB()
-	{
-		return new boolean[]{this.r, this.g, this.b};
+	public void setColor(ThreeBitColor color) {
+		this.color = color;
 	}
-	public java.awt.Color getColor()
-	{
-		return new java.awt.Color(r?1.0f:0.0f, g?1.0f:0.0f, b?1.0f:0.0f);
+	@Override
+	public java.awt.Dimension getPreferredSize() {
+		return new java.awt.Dimension(size, size);
 	}
 }

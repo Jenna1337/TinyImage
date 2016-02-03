@@ -17,6 +17,7 @@ public class TimgDesigner
 	public TimgDesigner()
 	{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLayout(new java.awt.GridBagLayout());
 		JMenu file = new JMenu("File");
 		JMenuItem save = new ActionMenuItem("Save As...", new Thread(
 				new Runnable(){

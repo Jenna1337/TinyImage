@@ -2,8 +2,8 @@ package tinyImage;
 
 import java.io.IOException;
 import java.util.Date;
-
 import sys.BitStorage;
+import tinyImage.designer.ThreeBitColor;
 
 public class Timg
 {
@@ -23,8 +23,8 @@ public class Timg
 		this.w = width;
 		this.h = height;
 		this.r = new BitStorage(this.getWidth()*this.getHeight());
-		this.g = new BitStorage();
-		this.b = new BitStorage();
+		this.g = new BitStorage(this.getWidth()*this.getHeight());
+		this.b = new BitStorage(this.getWidth()*this.getHeight());
 	}
 	public Timg(byte[] data)
 	{
@@ -60,11 +60,11 @@ public class Timg
 	}
 	public int getHeight()
 	{
-		return (int)this.h-Short.MIN_VALUE;
+		return -Short.MIN_VALUE+((int)this.h);
 	}
 	public int getWidth()
 	{
-		return (int)this.w-Short.MIN_VALUE;
+		return -Short.MIN_VALUE+((int)this.w);
 	}
 	/**@param b = 2 bytes
 	 * @return short**/
@@ -170,5 +170,9 @@ public class Timg
 	}
 	public static byte getRevision() {
 		return revision;
+	}
+	public ThreeBitColor getColorAt(int i)
+	{
+		return ThreeBitColor.getThreeBitColor(this.r.get(i), this.g.get(i), this.b.get(i));
 	}
 }
