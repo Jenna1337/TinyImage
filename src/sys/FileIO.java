@@ -8,6 +8,7 @@ import javax.swing.JFileChooser;
 
 public class FileIO
 {
+	//TODO fix file IO
 	static String fileext=".timg";
 	static ExtensionFileFilter filter = new ExtensionFileFilter("Tiny Image File", fileext);
 	public static void save(Component parent, byte[] data)

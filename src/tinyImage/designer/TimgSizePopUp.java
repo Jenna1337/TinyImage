@@ -34,8 +34,8 @@ public class TimgSizePopUp extends JDialog implements WindowListener
 		this.addWindowListener(this);
 		
 		this.setLayout(new BorderLayout());
-		this.h=new JSpinner(new SpinnerNumberModel(50,0,9999,1));
-		this.w=new JSpinner(new SpinnerNumberModel(50,0,9999,1));
+		this.h=new JSpinner(new SpinnerNumberModel(10,0,9999,1));
+		this.w=new JSpinner(new SpinnerNumberModel(10,0,9999,1));
 		
 		pane_in.add(h);
 		pane_in.add(w);
@@ -92,13 +92,6 @@ public class TimgSizePopUp extends JDialog implements WindowListener
 		sa[0] = getShort(this.w);
 		sa[1] = getShort(this.h);
 		return sa;
-	}
-	public static void main(String args[]) throws Exception
-	{
-		TimgSizePopUp cc = new TimgSizePopUp();
-
-		System.out.println(cc.waitfor());
-		System.out.println(java.util.Arrays.toString(cc.getSizeShorts()));
 	}
 	public void windowActivated(WindowEvent e){}
 	public void windowClosed(WindowEvent e){}

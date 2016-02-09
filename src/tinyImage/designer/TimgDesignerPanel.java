@@ -10,8 +10,9 @@ import tinyImage.Timg;
 public class TimgDesignerPanel extends JPanel
 {
 	volatile TimgDesignerPanel designer=this;
-	Palette palette;
-	Timg img=new Timg((short)(1+Short.MIN_VALUE),(short)(1+Short.MIN_VALUE));
+	public volatile boolean mousedown=false;
+	Palette palette = new Palette(this);
+	Timg img=new Timg((short)(10+Short.MIN_VALUE),(short)(10+Short.MIN_VALUE));
 
 	public TimgDesignerPanel()
 	{
@@ -19,7 +20,7 @@ public class TimgDesignerPanel extends JPanel
 	}
 	public void repaintCanvas()
 	{
-		//TODO
+		//TODO?
 	}
 	private void resizeCanvas()
 	{
@@ -27,19 +28,22 @@ public class TimgDesignerPanel extends JPanel
 		this.setLayout(new GridLayout(this.img.getHeight(), this.img.getWidth()));
 		for(int i=0; i<this.img.getHeight()*this.img.getWidth(); ++i)
 		{
-			System.out.println(i+" "+this.img.getHeight()+" "+this.img.getWidth());
+			//System.out.println(i+" "+this.img.getHeight()+" "+this.img.getWidth());
 			final int ci = i;
 			this.add(new ScaleablePixelBox(new Thread(new Runnable(){
 				public void run()
 				{
 					designer.getComponent(ci).setBackground(palette.getSelectedColor());;
 				}
-			}), this.img.getColorAt(i)));
+			}), this.img.getColorAt(i),this));
 		}
+		this.revalidate();
 	}
 	public void newImg(short[] wh)
 	{
 		this.img = new Timg(wh[0], wh[1]);
+		Thread.currentThread();
+		Thread.yield();
 		this.resizeCanvas();
 	}
 	public byte[] getData()

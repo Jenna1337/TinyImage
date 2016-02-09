@@ -2,9 +2,7 @@ package tinyImage.designer;
 
 import java.awt.Color;
 import java.awt.event.MouseEvent;
-
 import javax.swing.JPanel;
-import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.event.MouseInputListener;
 
@@ -13,24 +11,26 @@ public class ScaleablePixelBox extends JPanel implements MouseInputListener
 {
 	//for use in palette and main image design screen
 	private boolean mouseisover=false;
-	volatile boolean mousedown=false;
-	volatile int size = 50;
+	public volatile int size = 50;
 	private ThreeBitColor color;
+	private volatile TimgDesignerPanel parent;
 
 	Thread thread;
 
-	public ScaleablePixelBox(Thread thread, ThreeBitColor colorinit)
+	public ScaleablePixelBox(Thread thread, ThreeBitColor colorinit, TimgDesignerPanel parent)
 	{
+		this.parent=parent;
 		this.thread = thread;
 		this.setBackground(colorinit.getColor());
-		this.setBorder(new LineBorder(Color.GRAY));
+		this.setBorder(new LineBorder(Color.GRAY, 1));
+		this.addMouseListener(this);
 		//size = Math.min(this.getParent().getWidth(),this.getParent().getHeight());
 		this.setSize(size, size);
 		//TODO add a set size / ratio --- might not be in this file
 	}
 	private void runif()
 	{
-		if(this.mouseisover && this.mousedown)
+		if(this.mouseisover && parent.mousedown)
 			this.thread.run();
 	}
 	public void mouseClicked(MouseEvent e){}
@@ -46,13 +46,13 @@ public class ScaleablePixelBox extends JPanel implements MouseInputListener
 	}
 	public void mousePressed(MouseEvent e)
 	{
-		this.mousedown=true;
+		parent.mousedown=true;
 		runif();
 	}
 	public void mouseReleased(MouseEvent e)
 	{
 		runif();
-		this.mousedown=false;
+		parent.mousedown=false;
 	}
 	public void mouseDragged(MouseEvent arg0){}
 	public void mouseMoved(MouseEvent arg0){}
@@ -60,7 +60,7 @@ public class ScaleablePixelBox extends JPanel implements MouseInputListener
 		return mouseisover;
 	}
 	public boolean isMouseDown() {
-		return mousedown;
+		return parent.mousedown;
 	}
 	public ThreeBitColor getColor() {
 		return color;

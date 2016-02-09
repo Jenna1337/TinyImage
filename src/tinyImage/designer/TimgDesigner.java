@@ -60,6 +60,7 @@ public class TimgDesigner
 		file.add(save);
 		menubar.add(file);
 		frame.setContentPane(panel);
+		menubar.add(panel.palette);
 		frame.setJMenuBar(menubar);
 	}
 	public void setVisible(boolean visibility)
