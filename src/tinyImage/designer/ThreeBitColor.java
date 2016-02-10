@@ -29,4 +29,16 @@ public enum ThreeBitColor
 		return ThreeBitColor.values()[Byte.parseByte((red?"1":"0")+(green?"1":"0")+(blue?"1":"0"), 2)];
 		
 	}
+	public boolean isR()
+	{
+		return this.r;
+	}
+	public boolean isG()
+	{
+		return this.g;
+	}
+	public boolean isB()
+	{
+		return this.b;
+	}
 }

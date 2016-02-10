@@ -25,6 +25,7 @@ public class BitStorage
 	{
 		byte[] bytes=new byte[bits.length/8+1];
 		String bitString = this.toString();
+		System.out.println(bitString);
 		while(bytes.length*8>bitString.length())
 			bitString+='0';
 		for(int i=0; i<bytes.length; ++i)
@@ -60,16 +61,13 @@ public class BitStorage
 	}
 	public static byte[] concatenate (byte[] a, byte[]... bc)
 	{
-		int debug=1;
 		byte[] n = java.util.Arrays.copyOf(a, a.length);
 		for(byte[] b : bc)
 		{
-			debug+=b.length;
-			System.out.println(b.length+"; "+java.util.Arrays.toString(b));
 			n = java.util.Arrays.copyOf(n, n.length+b.length);
-			concatenate(n, b);
+			n = concatenate(n, b);
 		}
-		System.out.println(debug);
+		System.out.println(java.util.Arrays.toString(n));
 		return n;
 	}
 	private static byte[] concatenate (byte[] a, byte[] b)
@@ -77,10 +75,20 @@ public class BitStorage
 		byte[] c = new byte[a.length+b.length];
 		System.arraycopy(a, 0, c, 0, a.length);
 		System.arraycopy(b, 0, c, a.length, b.length);
+		System.out.println("c="+java.util.Arrays.toString(c));
 		return c;
 	}
+	@SuppressWarnings("unused")
+	private static byte[] arraycopy(byte[] src, int srcPos, byte[] dest, int destPos, int length)
+	{
+		System.out.println("\na="+java.util.Arrays.toString(src)+"\nb="+java.util.Arrays.toString(dest));
+		for(int i=srcPos,d=destPos;i<srcPos+length&&d<destPos+length;++i,++d)
+			dest[d]=((Byte)src[i]).byteValue();
+		System.out.println("b="+java.util.Arrays.toString(dest));
+		return dest;
+	}
 	private static boolean[] byte2bit(byte[] bytes) {
-		boolean[] bits = new boolean[bytes.length * 8];
+		boolean[] bits = new boolean[bytes.length / 8];
 		for (int i = 0; i < bytes.length * 8; i++)
 			if ((bytes[i / 8] & (1 << (7 - (i % 8)))) > 0)
 				bits[i] = true;

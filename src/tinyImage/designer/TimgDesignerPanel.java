@@ -33,9 +33,10 @@ public class TimgDesignerPanel extends JPanel
 			this.add(new ScaleablePixelBox(new Thread(new Runnable(){
 				public void run()
 				{
-					designer.getComponent(ci).setBackground(palette.getSelectedColor());;
+					designer.getComponent(ci).setBackground(palette.getSelectedColor());
+					img.setColor(ci, palette.currentcolor);;
 				}
-			}), this.img.getColorAt(i),this));
+			}), this.img.getColor(i),this));
 		}
 		this.revalidate();
 	}

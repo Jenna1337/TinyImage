@@ -13,6 +13,7 @@ public class FileIO
 	static ExtensionFileFilter filter = new ExtensionFileFilter("Tiny Image File", fileext);
 	public static void save(Component parent, byte[] data)
 	{
+		System.out.println(java.util.Arrays.toString(data));
 		JFileChooser fc = new JFileChooser();
 		fc.addChoosableFileFilter(filter);
 		fc.setFileFilter(filter);

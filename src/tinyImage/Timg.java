@@ -120,10 +120,20 @@ public class Timg
 	}
 	public byte[] getData()
 	{
+		System.out.println(Timg.getRevision()
+				+"\nw="+java.util.Arrays.toString(toBytes(w))
+				+"\nh="+java.util.Arrays.toString(toBytes(h))
+				+"\nd="+java.util.Arrays.toString(longtobyte(new Date().getTime()))
+				+"\nr="+java.util.Arrays.toString(r.toByteArray())
+				+"\ng="+java.util.Arrays.toString(g.toByteArray())
+				+"\nb="+java.util.Arrays.toString(b.toByteArray())
+				+"\nc="+java.util.Arrays.toString(ccinfo.getBytes()));
 		byte[] outbytes = BitStorage.concatenate(new byte[]{Timg.getRevision()}, toBytes(w), toBytes(h), 
 				longtobyte(new Date().getTime()), 
 				r.toByteArray(), g.toByteArray(), b.toByteArray(),
 				ccinfo.getBytes());
+		System.out.println(java.util.Arrays.toString(outbytes));
+		System.exit(0);
 		return outbytes;
 	}
 	@Override
@@ -171,7 +181,13 @@ public class Timg
 	public static byte getRevision() {
 		return revision;
 	}
-	public ThreeBitColor getColorAt(int i)
+	public void setColor(int i, ThreeBitColor color)
+	{
+		this.r.set(i, color.isR());
+		this.g.set(i, color.isG());
+		this.b.set(i, color.isB());
+	}
+	public ThreeBitColor getColor(int i)
 	{
 		return ThreeBitColor.getThreeBitColor(this.r.get(i), this.g.get(i), this.b.get(i));
 	}
