@@ -120,20 +120,19 @@ public class Timg
 	}
 	public byte[] getData()
 	{
-		System.out.println(Timg.getRevision()
+		/*System.out.println(Timg.getRevision()
 				+"\nw="+java.util.Arrays.toString(toBytes(w))
 				+"\nh="+java.util.Arrays.toString(toBytes(h))
 				+"\nd="+java.util.Arrays.toString(longtobyte(new Date().getTime()))
 				+"\nr="+java.util.Arrays.toString(r.toByteArray())
 				+"\ng="+java.util.Arrays.toString(g.toByteArray())
 				+"\nb="+java.util.Arrays.toString(b.toByteArray())
-				+"\nc="+java.util.Arrays.toString(ccinfo.getBytes()));
+				+"\nc="+java.util.Arrays.toString(ccinfo.getBytes()));*/
 		byte[] outbytes = BitStorage.concatenate(new byte[]{Timg.getRevision()}, toBytes(w), toBytes(h), 
 				longtobyte(new Date().getTime()), 
 				r.toByteArray(), g.toByteArray(), b.toByteArray(),
 				ccinfo.getBytes());
 		System.out.println(java.util.Arrays.toString(outbytes));
-		System.exit(0);
 		return outbytes;
 	}
 	@Override

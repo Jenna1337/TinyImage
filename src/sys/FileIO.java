@@ -13,7 +13,6 @@ public class FileIO
 	static ExtensionFileFilter filter = new ExtensionFileFilter("Tiny Image File", fileext);
 	public static void save(Component parent, byte[] data)
 	{
-		System.out.println(java.util.Arrays.toString(data));
 		JFileChooser fc = new JFileChooser();
 		fc.addChoosableFileFilter(filter);
 		fc.setFileFilter(filter);
@@ -34,9 +33,9 @@ public class FileIO
 			}
 		}
 	}
-	public static String open(Component parent)
+	public static byte[] open(Component parent)
 	{
-		String data = "";
+		byte[] data = {};
 		JFileChooser fc = new JFileChooser();
 		fc.addChoosableFileFilter(filter);
 		fc.setFileFilter(filter);
@@ -48,9 +47,12 @@ public class FileIO
 				BufferedReader in = new BufferedReader(new java.io.FileReader(file));
 				try
 				{
-					int c=0;
+					int c=in.read();
 					while (c!=-1)
-						data+=(char)(c=in.read());
+					{
+						BitStorage.concatenate(data,new byte[]{(byte)c});
+						c=in.read();
+					}
 				} catch(IOException ioe) {}
 				in.close();
 
