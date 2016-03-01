@@ -26,9 +26,11 @@ public class TimgDesignerPanel extends JPanel
 	{
 		this.removeAll();
 		this.setLayout(new GridLayout(this.img.getHeight(), this.img.getWidth()));
-		for(int i=0; i<this.img.getHeight()*this.img.getWidth(); ++i)
+		System.out.println(this.img.getHeight()+" "+this.img.getWidth());
+		int size=this.img.getHeight()*this.img.getWidth();
+		for(int i=0; i<size; ++i)
 		{
-			//System.out.println(i+" "+this.img.getHeight()+" "+this.img.getWidth());
+			System.out.println(i+" "+this.img.getHeight()+" "+this.img.getWidth());
 			final int ci = i;
 			this.add(new ScaleablePixelBox(new Thread(new Runnable(){
 				public void run()

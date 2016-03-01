@@ -81,9 +81,15 @@ public class BitStorage
 	}
 	private static boolean[] byte2bit(byte[] bytes) {
 		boolean[] bits = new boolean[bytes.length * 8];
-		for (int i = 0; i < bytes.length * 8; i++)
-			if ((bytes[i / 8] & (1 << (7 - (i % 8)))) > 0)
-				bits[i] = true;
+		for (int i=0; i<bytes.length; i++)
+		{
+			byte curbyte = bytes[i];
+			for(int p=7; p>=0; --p)
+			{
+				bits[i+p] = (curbyte&1)==1;
+				curbyte>>=1;
+			}
+		}
 		return bits;
 	}
 	public boolean get(int i)

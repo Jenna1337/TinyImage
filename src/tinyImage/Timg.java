@@ -111,10 +111,10 @@ public class Timg
 		if(bytes_percolor*3>rgba.length)
 			throw new IndexOutOfBoundsException();
 		index+=bytes_percolor*3+1;
-		this.r = new BitStorage(java.util.Arrays.copyOfRange(rgba, 0,                  bytes_percolor  +1));
-		this.g = new BitStorage(java.util.Arrays.copyOfRange(rgba, bytes_percolor+1,   bytes_percolor*2+1));
-		this.b = new BitStorage(java.util.Arrays.copyOfRange(rgba, bytes_percolor*2+1, bytes_percolor*3+1));
-		
+		this.r = new BitStorage(java.util.Arrays.copyOfRange(rgba, 0,                  bytes_percolor));
+		this.g = new BitStorage(java.util.Arrays.copyOfRange(rgba, bytes_percolor,   bytes_percolor*2));
+		this.b = new BitStorage(java.util.Arrays.copyOfRange(rgba, bytes_percolor*2, bytes_percolor*3));
+		System.out.println("r="+r+"\ng="+g+"\nb="+b);
 		//set copyright info file meta
 		System.out.println(index+" "+bytes.length+" "+java.util.Arrays.toString(bytes));
 		this.ccinfo=new String(java.util.Arrays.copyOfRange(bytes, index, bytes.length));

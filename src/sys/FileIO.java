@@ -8,7 +8,6 @@ import javax.swing.JFileChooser;
 
 public class FileIO
 {
-	//TODO fix file IO
 	static String fileext=".timg";
 	static ExtensionFileFilter filter = new ExtensionFileFilter("Tiny Image File", fileext);
 	public static void save(Component parent, byte[] data)
@@ -47,11 +46,11 @@ public class FileIO
 				FileInputStream in = new FileInputStream(file);
 				try
 				{
-					byte c=(byte) in.read();
+					int c= in.read();
 					while (c!=-1)
 					{
 						data = BitStorage.concatenate(data,new byte[]{(byte)c});
-						c=(byte) in.read();
+						c= in.read();
 					}
 				} catch(IOException ioe) {}
 				in.close();
