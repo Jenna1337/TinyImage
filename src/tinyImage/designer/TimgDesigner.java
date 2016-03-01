@@ -27,7 +27,7 @@ public class TimgDesigner
 				new Runnable(){
 					public void run(){
 						try{
-							byte[] bs = sys.FileIO.open(frame).getBytes();
+							byte[] bs = sys.FileIO.open(frame);
 							try {
 								panel.setData(bs);
 							} catch (IOException e) {

@@ -7,7 +7,7 @@ import tinyImage.designer.ThreeBitColor;
 
 public class Timg
 {
-	private static byte revision=0;
+	private static byte revision=1;
 	BitStorage r,g,b;
 	public short w,h;//2 bytes each
 	protected Date lastsaved = new Date();
@@ -68,22 +68,21 @@ public class Timg
 	}
 	/**@param b = 2 bytes
 	 * @return short**/
-	public static short toShort(byte[] b)
+	private static short toShort(byte[] b)
 	{
 		short retVal;
-		if (b.length == 1)
-			retVal = b[0];
-		else 
-			retVal = (short)(b[1] << 8 | b[0]);//for little endian
+		retVal = b[1];
+		retVal <<= 8;
+		retVal |= b[0];
 		return retVal;
 	}
 	/**@param s = short
 	 * @return 2 bytes**/
-	public static byte[] toBytes(short s)
+	private static byte[] toBytes(short s)
 	{
 		byte[] b = new byte[2];
-		b[0] = (byte)(s & 0xff);
-		b[1] = (byte)((s >> 8) & 0xff);
+		b[0] = new Short(s).byteValue();//(byte)(s & 0xff);
+		b[1] = new Short((short) (s>>8)).byteValue();//(byte)((s >> 8) & 0xff);
 		return b;
 	}
 	/**@throws IOException if the data given is a newer version than the program**/
@@ -97,9 +96,9 @@ public class Timg
 		index+=1;
 
 		//sets width and height
-		this.w=toShort(java.util.Arrays.copyOfRange(bytes, index, 2+index));//0 and 1
+		this.w=toShort(java.util.Arrays.copyOfRange(bytes, index, 2+index));
 		index+=2;
-		this.h=toShort(java.util.Arrays.copyOfRange(bytes, index, 4+index));//2 and 3
+		this.h=toShort(java.util.Arrays.copyOfRange(bytes, index, 4+index));
 		index+=2;
 
 		//set date
@@ -109,25 +108,27 @@ public class Timg
 		//set colors
 		final int bytes_percolor=(int)Math.ceil((int)this.getWidth()*(int)this.getHeight()/8);
 		byte[] rgba = java.util.Arrays.copyOfRange(bytes, index, index+bytes_percolor*3+1);
+		if(bytes_percolor*3>rgba.length)
+			throw new IndexOutOfBoundsException();
 		index+=bytes_percolor*3+1;
-
-		this.r = new BitStorage(java.util.Arrays.copyOfRange(rgba, 0,                 bytes_percolor+1));
+		this.r = new BitStorage(java.util.Arrays.copyOfRange(rgba, 0,                  bytes_percolor  +1));
 		this.g = new BitStorage(java.util.Arrays.copyOfRange(rgba, bytes_percolor+1,   bytes_percolor*2+1));
 		this.b = new BitStorage(java.util.Arrays.copyOfRange(rgba, bytes_percolor*2+1, bytes_percolor*3+1));
-
+		
 		//set copyright info file meta
+		System.out.println(index+" "+bytes.length+" "+java.util.Arrays.toString(bytes));
 		this.ccinfo=new String(java.util.Arrays.copyOfRange(bytes, index, bytes.length));
 	}
 	public byte[] getData()
 	{
-		/*System.out.println(Timg.getRevision()
+		System.out.println(Timg.getRevision()
 				+"\nw="+java.util.Arrays.toString(toBytes(w))
 				+"\nh="+java.util.Arrays.toString(toBytes(h))
 				+"\nd="+java.util.Arrays.toString(longtobyte(new Date().getTime()))
 				+"\nr="+java.util.Arrays.toString(r.toByteArray())
 				+"\ng="+java.util.Arrays.toString(g.toByteArray())
 				+"\nb="+java.util.Arrays.toString(b.toByteArray())
-				+"\nc="+java.util.Arrays.toString(ccinfo.getBytes()));*/
+				+"\nc="+java.util.Arrays.toString(ccinfo.getBytes()));//*/
 		byte[] outbytes = BitStorage.concatenate(new byte[]{Timg.getRevision()}, toBytes(w), toBytes(h), 
 				longtobyte(new Date().getTime()), 
 				r.toByteArray(), g.toByteArray(), b.toByteArray(),

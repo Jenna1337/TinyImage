@@ -1,7 +1,7 @@
 package sys;
 import java.awt.Component;
-import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import javax.swing.JFileChooser;
@@ -44,14 +44,14 @@ public class FileIO
 			File file = fc.getSelectedFile();
 			try
 			{
-				BufferedReader in = new BufferedReader(new java.io.FileReader(file));
+				FileInputStream in = new FileInputStream(file);
 				try
 				{
-					int c=in.read();
+					byte c=(byte) in.read();
 					while (c!=-1)
 					{
-						BitStorage.concatenate(data,new byte[]{(byte)c});
-						c=in.read();
+						data = BitStorage.concatenate(data,new byte[]{(byte)c});
+						c=(byte) in.read();
 					}
 				} catch(IOException ioe) {}
 				in.close();
