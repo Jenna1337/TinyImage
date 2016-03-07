@@ -106,18 +106,18 @@ public class Timg
 		index+=8;
 
 		//set colors
-		final int bytes_percolor=(int)Math.ceil((int)this.getWidth()*(int)this.getHeight()/8);
+		final int bytes_percolor=(int)Math.ceil(this.getWidth()*this.getHeight()/8)+(this.getHeight()*this.getWidth()%8!=0?1:0);
 		byte[] rgba = java.util.Arrays.copyOfRange(bytes, index, index+bytes_percolor*3+1);
 		if(bytes_percolor*3>rgba.length)
 			throw new IndexOutOfBoundsException();
 		index+=bytes_percolor*3+1;
-		this.r = new BitStorage(java.util.Arrays.copyOfRange(rgba, 0,                  bytes_percolor));
+		this.r = new BitStorage(java.util.Arrays.copyOfRange(rgba, 0,                bytes_percolor));
 		this.g = new BitStorage(java.util.Arrays.copyOfRange(rgba, bytes_percolor,   bytes_percolor*2));
 		this.b = new BitStorage(java.util.Arrays.copyOfRange(rgba, bytes_percolor*2, bytes_percolor*3));
 		System.out.println("r="+r+"\ng="+g+"\nb="+b);
 		//set copyright info file meta
 		System.out.println(index+" "+bytes.length+" "+java.util.Arrays.toString(bytes));
-		this.ccinfo=new String(java.util.Arrays.copyOfRange(bytes, index, bytes.length));
+		this.ccinfo=index<=bytes.length?new String(java.util.Arrays.copyOfRange(bytes, index, bytes.length)):"";
 	}
 	public byte[] getData()
 	{

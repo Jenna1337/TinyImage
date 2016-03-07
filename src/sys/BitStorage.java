@@ -23,16 +23,14 @@ public class BitStorage
 	}
 	public byte[] toByteArray()
 	{
-		byte[] bytes=new byte[bits.length/8+1];
+		byte[] bytes=new byte[bits.length/8+(bits.length%8!=0?1:0)];
 		String bitString = this.toString();
 		while(bytes.length*8>bitString.length())
 			bitString+='0';
 		for(int i=0; i<bytes.length; ++i)
 		{
 			String con = bitString.substring(8*i, 8+8*i);
-			if(con.charAt(0)=='1')
-				con = '-'+con.substring(1);
-			bytes[i] = Byte.parseByte(con, 2);
+			bytes[i] = (byte)Integer.parseInt(con, 2);
 		}
 		return bytes;
 	}
@@ -81,16 +79,16 @@ public class BitStorage
 	}
 	private static boolean[] byte2bit(byte[] bytes) {
 		boolean[] bits = new boolean[bytes.length * 8];
-		for (int i=0; i<bytes.length; i++)
+		for (int i=0; i<bytes.length*8; ++i)
 		{
-			byte curbyte = bytes[i];
-			for(int p=7; p>=0; --p)
-			{
-				bits[i+p] = (curbyte&1)==1;
-				curbyte>>=1;
-			}
+			byte curbyte = bytes[i/8];
+			bits[i] = isBitSet(curbyte,i);
 		}
 		return bits;
+	}
+	private static boolean isBitSet(byte b, int bit)
+	{
+	    return (b & (1 << bit)) != 0;
 	}
 	public boolean get(int i)
 	{

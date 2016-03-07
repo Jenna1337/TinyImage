@@ -20,6 +20,7 @@ public class TimgDesignerPanel extends JPanel
 	}
 	public void repaintCanvas()
 	{
+		this.getParent().repaint();
 		//TODO?
 	}
 	private void resizeCanvas()
